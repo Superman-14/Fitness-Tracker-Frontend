@@ -1,9 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
+import { useState } from "react";
+import axios from "axios";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>
-		<App />
-	</React.StrictMode>
-)
+export default function Auth({ setUser }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  const login = async () => {
+    const res = await axios.post("https://your-backend-url/login", { email, password });
+    localStorage.setItem("token", res.data.token);
+    setUser(res.data.token);
+  };
+
+  return (
+    <div>
+      <h2>Login</h2>
+      <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+      <button onClick={login}>Login</button>
+    </div>
+  );
+}
